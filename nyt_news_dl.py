@@ -34,7 +34,7 @@ def make_article(url):
     pub_date = pub_date_soup.get_text() if pub_date_soup else ''
     article['pub_date'] = pub_date
 
-    datetime_soup = soup.find(class_="byline-box").find('time')['datetime']
+    datetime_soup = soup.find(class_="byline-box").find('time')
     datetime = datetime_soup['datetime'] if datetime_soup else '1970-01-01 00:00:00'
     article['datetime'] = datetime
 
