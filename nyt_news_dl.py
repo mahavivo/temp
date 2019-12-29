@@ -26,7 +26,6 @@ def make_article(url):
     header_eng = header_eng_soup.get_text() if header_eng_soup else ''
     article['header_eng'] = header_eng
 
-
     byline_soup = soup.find(class_="byline-box")
     if byline_soup:
         author_soup = byline_soup.find('address')
