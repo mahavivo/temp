@@ -18,17 +18,28 @@ def make_article(url):
     html = html_downloader(url)
     soup = BeautifulSoup(html, 'lxml')
 
-    header_chn = soup.find(class_="article-header").find("header").find('h1').get_text()
+    header_chn_soup = soup.find(class_="article-header").find("header").find('h1')
+    header_chn = header_chn_soup.get_text() if header_chn_soup else ''
     article['header_chn'] = header_chn
-    header_eng = soup.find(class_="article-header").find("header").find(class_="en-title").get_text()
+
+    header_eng_soup = soup.find(class_="article-header").find("header").find(class_="en-title")
+    header_eng = header_eng_soup.get_text() if header_eng_soup else ''
     article['header_eng'] = header_eng
-    author = soup.find(class_="byline-box").find('address').get_text()
+
+    author_soup = soup.find(class_="byline-box").find('address')
+    author = author_soup.get_text() if author_soup else ''
     article['author'] = author
-    pub_date = soup.find(class_="byline-box").find('time').get_text()
+
+    pub_date_soup = soup.find(class_="byline-box").find('time')
+    pub_dat = pub_date_soup.get_text() if pub_date_soup else ''
     article['pub_date'] = pub_date
-    datetime = soup.find(class_="byline-box").find('time')['datetime']
+
+    datetime_soup = soup.find(class_="byline-box").find('time')['datetime']
+    datetime = datetime_soup['datetime'] if datetime_soup else '1970-01-01 00:00:00'
     article['datetime'] = datetime
-    author_info = soup.find(class_="author-info").get_text()
+
+    author_info_soup = soup.find(class_="author-info")
+    author_info = author_info_soup.get_text() if author_info_soup else ''
     article['author_info'] = author_info
 
     content = []
@@ -48,7 +59,7 @@ def save_article(codict, path):
     prefix = codict['datetime'][:10]
     whole_content = codict['header_chn'] + '\n' + codict['header_eng'] + '\n' + codict['author'] + '\n' + \
                     codict['pub_date'] + '\n' + codict['content'] + '\n' + codict['author_info']
-    os.chdir(os.path.join(r"./nytimes", path))
+    os.chdir(os.path.join(r"/root/temp/nytimes", path))
     with open('%s_%s_%s.txt' % (prefix, path, file_name), 'w', encoding='utf-8') as f:
         f.write(whole_content)
         print('%s has been saved.' % file_name)
