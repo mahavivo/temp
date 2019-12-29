@@ -26,17 +26,24 @@ def make_article(url):
     header_eng = header_eng_soup.get_text() if header_eng_soup else ''
     article['header_eng'] = header_eng
 
-    author_soup = soup.find(class_="byline-box").find('address')
-    author = author_soup.get_text() if author_soup else ''
-    article['author'] = author
 
-    pub_date_soup = soup.find(class_="byline-box").find('time')
-    pub_date = pub_date_soup.get_text() if pub_date_soup else ''
-    article['pub_date'] = pub_date
+    byline_soup = soup.find(class_="byline-box")
+    if byline_soup:
+        author_soup = byline_soup.find('address')
+        author = author_soup.get_text() if author_soup else ''
+        article['author'] = author
 
-    datetime_soup = soup.find(class_="byline-box").find('time')
-    datetime = datetime_soup['datetime'] if datetime_soup else '1970-01-01 00:00:00'
-    article['datetime'] = datetime
+        pub_date_soup = byline_soup.find('time')
+        pub_date = pub_date_soup.get_text() if pub_date_soup else ''
+        article['pub_date'] = pub_date
+
+        datetime_soup = byline_soup.find('time')
+        datetime = datetime_soup['datetime'] if datetime_soup else '1970-01-01 00:00:00'
+        article['datetime'] = datetime
+    else:
+        article['author'] = ''
+        article['pub_date'] = ''
+        article['datetime'] = '1970-01-01 00:00:00'
 
     author_info_soup = soup.find(class_="author-info")
     author_info = author_info_soup.get_text() if author_info_soup else ''
